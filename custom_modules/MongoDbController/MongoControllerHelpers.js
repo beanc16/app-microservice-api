@@ -225,7 +225,8 @@ class MongoControllerHelpers
         
         else if (findParams.id)
         {
-            findParams.id = new ObjectId(findParams.id);
+            findParams._id = new ObjectId(findParams.id);
+            delete findParams.id;
         }
 
         return findParams;
