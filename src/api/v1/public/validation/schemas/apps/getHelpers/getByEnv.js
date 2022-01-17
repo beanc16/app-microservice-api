@@ -6,6 +6,7 @@ const { envsEnum } = require("../../../../../../../js/enums");
 
 const getByEnvSchema = JoiRequired.object({
     env: JoiRequired.string().allow(...envsEnum.envs),
+    searchName: Joi.string(),
 });
 
 
