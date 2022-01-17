@@ -6,9 +6,15 @@
 const express = require("express");
 const app = express();
 
+// Controllers
+const { AppController } = require("../../../../js/controllers");
+
 
 // Custom variables
-const { SuccessResponse } = require("../../../../../custom_modules/Responses");
+const {
+    SuccessResponse,
+    BadRequestErrorResponse,
+} = require("../../../../../custom_modules/Responses");
 
 
 
@@ -20,10 +26,25 @@ const { SuccessResponse } = require("../../../../../custom_modules/Responses");
 
 app.get("/", function(req, res)
 {
-    const response = new SuccessResponse({
-        message: "Pong",
+    AppController.getAll()
+    .then(function (results)
+    {
+        const response = new SuccessResponse({
+            res,
+            message: "Successfully retrieved all apps",
+            data: results,
+        });
+        res.send(response);
+    })
+    .catch(function (err)
+    {
+        const errResponse = new BadRequestErrorResponse({
+            res,
+            message: "Failed to retrieve all apps",
+            err,
+        });
+        res.send(errResponse);
     });
-    res.send(response);
 });
 
 
@@ -34,6 +55,7 @@ app.get("/", function(req, res)
  * POSTS *
  *********/
 
+/*
 app.post("/", function(req, res)
 {
     const response = new SuccessResponse({
@@ -41,6 +63,7 @@ app.post("/", function(req, res)
     });
     res.send(response);
 });
+*/
 
 
 
@@ -50,6 +73,7 @@ app.post("/", function(req, res)
  * PUT *
  *******/
 
+/*
 app.put("/", function(req, res)
 {
     const response = new SuccessResponse({
@@ -57,6 +81,7 @@ app.put("/", function(req, res)
     });
     res.send(response);
 });
+*/
 
 
 
@@ -66,6 +91,7 @@ app.put("/", function(req, res)
  * PATCHES *
  ***********/
 
+/*
 app.patch("/", function(req, res)
 {
     const response = new SuccessResponse({
@@ -73,6 +99,7 @@ app.patch("/", function(req, res)
     });
     res.send(response);
 });
+*/
 
 
 
@@ -82,6 +109,7 @@ app.patch("/", function(req, res)
  * DELETES *
  ***********/
 
+/*
 app.delete("/", function(req, res)
 {
     const response = new SuccessResponse({
@@ -89,6 +117,7 @@ app.delete("/", function(req, res)
     });
     res.send(response);
 });
+*/
 
 
 
