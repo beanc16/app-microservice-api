@@ -1,4 +1,4 @@
-const { getAppsSchema, getAppSchema } = require("../../schemas");
+const { getAppsSchema } = require("../../schemas");
 const { validateJoiSchema } = require("../../../../../../../custom_modules/JoiHelpers");
 
 
