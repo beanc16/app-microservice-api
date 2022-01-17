@@ -1,7 +1,7 @@
-//const myValidators = require("./myValidators");
+const appValidators = require("./apps");
 
 
 
 module.exports = {
-    //...myValidators,
+    ...appValidators,
 };
