@@ -3,7 +3,6 @@ const { validateJoiSchema } = require("../../../../../../../custom_modules/JoiHe
 
 
 
-// Get many apps
 function validateGetAppsPayload(payload)
 {
     return new Promise(function (resolve, reject)
@@ -20,26 +19,8 @@ function validateGetAppsPayload(payload)
     });
 }
 
-// Get one app
-function validateGetAppPayload(payload)
-{
-    return new Promise(function (resolve, reject)
-    {
-        validateJoiSchema(getAppSchema, payload)
-            .then(function (value)
-            {
-                resolve(value);
-            })
-            .catch(function (error)
-            {
-                reject(error);
-            });
-    });
-}
-
 
 
 module.exports = {
     validateGetAppsPayload,
-    validateGetAppPayload,
 };
