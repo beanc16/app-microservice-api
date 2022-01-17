@@ -33,62 +33,32 @@ const {
  * GETS *
  ********/
 
-// Many apps
 app.get("/", function(req, res)
 {
     validateGetAppsPayload(req.query)
-    .then(function (results)
+    .then(function (payload)
     {
-        const response = new SuccessResponse({
-            res,
-            message: "Successfully validated payload",
-            data: results,
-        });
-        res.send(response);
-    })
-    .catch(function (err)
-    {
-        const errResponse = new ValidationErrorResponse({
-            error: err,
-            res: res,
-        });
-        res.send(errResponse);
-    });
-    /*
-    AppController.getAll()
-    .then(function (results)
-    {
-        const response = new SuccessResponse({
-            res,
-            message: "Successfully retrieved all apps",
-            data: results,
-        });
-        res.send(response);
-    })
-    .catch(function (err)
-    {
-        const errResponse = new BadRequestErrorResponse({
-            res,
-            message: "Failed to retrieve all apps",
-            err,
-        });
-        res.send(errResponse);
-    });
-    */
-});
+        const findParams = convertEnvForFindParams(req.query);
 
-// One app
-app.get("/:appId", function(req, res)
-{
-    validateGetAppPayload({ id: req.params.appId })
-    .then(function (results)
-    {
-        const response = new SuccessResponse({
-            res,
-            message: "Successfully validated payload",
-            data: results,
+        AppController.getAll(findParams)
+        .then(function (data)
+        {
+            const response = new SuccessResponse({
+                res,
+                message: getSuccessMessageForGetApps(req.query),
+                data: data.results,
+            });
+            res.send(response);
+        })
+        .catch(function (err)
+        {
+            const errResponse = new BadRequestErrorResponse({
+                res,
+                message: "Failed to retrieve all apps",
+                err,
+            });
+            res.send(errResponse);
         });
-        res.send(response);
     })
     .catch(function (err)
     {
@@ -100,28 +70,53 @@ app.get("/:appId", function(req, res)
     });
 });
 
-// One app
-app.get("/:env/:searchName", function(req, res)
+// Get apps - helper
+function getSuccessMessageForGetApps(query)
 {
-    validateGetAppPayload(req.params)
-    .then(function (results)
+    let str = "Successfully retrieved all apps";
+
+    if (query.env)
     {
-        const response = new SuccessResponse({
-            res,
-            message: "Successfully validated payload",
-            data: results,
-        });
-        res.send(response);
-    })
-    .catch(function (err)
+        str += ` from ${query.env}`;
+    }
+
+    if (query.searchName)
     {
-        const errResponse = new ValidationErrorResponse({
-            error: err,
-            res: res,
+        str += ` named ${query.searchName}`;
+    }
+
+    if (query._id)
+    {
+        str += ` with ID ${query._id}`;
+    }
+    else if (query.id)
+    {
+        str += ` with ID ${query.id}`;
+    }
+
+    return str;
+}
+
+// Get apps - helper
+function convertEnvForFindParams(query)
+{
+    let findParams = query;
+
+    if (query.env)
+    {
+        findParams = Object.assign({}, query, {
+            // envs array includes query.env
+            envs: {
+                // $in for Mongo = array.includes() for JavaScript
+                $in: [query.env]
+            },
         });
-        res.send(errResponse);
-    });
-});
+
+        delete findParams.env;
+    }
+    
+    return findParams;
+}
 
 
 
