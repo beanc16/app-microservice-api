@@ -33,6 +33,7 @@ const {
  * GETS *
  ********/
 
+// Many apps
 app.get("/", function(req, res)
 {
     validateGetAppsPayload(req.query)
@@ -74,6 +75,52 @@ app.get("/", function(req, res)
         res.send(errResponse);
     });
     */
+});
+
+// One app
+app.get("/:appId", function(req, res)
+{
+    validateGetAppPayload({ id: req.params.appId })
+    .then(function (results)
+    {
+        const response = new SuccessResponse({
+            res,
+            message: "Successfully validated payload",
+            data: results,
+        });
+        res.send(response);
+    })
+    .catch(function (err)
+    {
+        const errResponse = new ValidationErrorResponse({
+            error: err,
+            res: res,
+        });
+        res.send(errResponse);
+    });
+});
+
+// One app
+app.get("/:env/:searchName", function(req, res)
+{
+    validateGetAppPayload(req.params)
+    .then(function (results)
+    {
+        const response = new SuccessResponse({
+            res,
+            message: "Successfully validated payload",
+            data: results,
+        });
+        res.send(response);
+    })
+    .catch(function (err)
+    {
+        const errResponse = new ValidationErrorResponse({
+            error: err,
+            res: res,
+        });
+        res.send(errResponse);
+    });
 });
 
 
