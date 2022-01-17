@@ -1,7 +1,7 @@
-//const MyController = require("./MyController");
+const AppController = require("./AppController");
 
 
 
 module.exports = {
-    //MyController,
+    AppController,
 };
