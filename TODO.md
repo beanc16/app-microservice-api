@@ -2,7 +2,7 @@
 
 ## Endpoints
 - [ ] App
-  - [ ] Get
+  - [x] Get
   - [ ] Create
   - [ ] Update
   - [ ] Delete
