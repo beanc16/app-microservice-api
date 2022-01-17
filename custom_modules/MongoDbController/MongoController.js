@@ -1,4 +1,5 @@
 // Mongo
+const { ObjectId } = require("mongodb");
 const MongoConnection = require("./MongoConnection");
 const MongoResults = require("./MongoResults");
 
@@ -357,6 +358,27 @@ class MongoControllerHelpers
             resolve(true);
 		});
 	}
+
+
+
+	/* 
+	 * UTILITY
+	 */
+
+    static parseFindParams(findParams)
+    {
+        if (findParams._id)
+        {
+            findParams._id = new ObjectId(findParams._id);
+        }
+        
+        else if (findParams.id)
+        {
+            findParams.id = new ObjectId(findParams.id);
+        }
+
+        return findParams;
+    }
 }
 
 
