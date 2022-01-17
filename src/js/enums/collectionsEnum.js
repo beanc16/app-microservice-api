@@ -1,5 +1,5 @@
 const collectionsEnum = {
-    // TODO: Add collectionsEnum
+    "Apps": process.env.COLLECTION_APPS,
 };
 
 Object.freeze(collectionsEnum);
