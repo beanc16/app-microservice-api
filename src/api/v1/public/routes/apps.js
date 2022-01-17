@@ -24,28 +24,15 @@ const {
  * GETS *
  ********/
 
+/*
 app.get("/", function(req, res)
 {
-    AppController.getAll()
-    .then(function (results)
-    {
-        const response = new SuccessResponse({
-            res,
-            message: "Successfully retrieved all apps",
-            data: results,
-        });
-        res.send(response);
-    })
-    .catch(function (err)
-    {
-        const errResponse = new BadRequestErrorResponse({
-            res,
-            message: "Failed to retrieve all apps",
-            err,
-        });
-        res.send(errResponse);
+    const response = new SuccessResponse({
+        message: "Pong",
     });
+    res.send(response);
 });
+*/
 
 
 
