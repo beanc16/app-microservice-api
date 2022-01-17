@@ -14,7 +14,6 @@ const { AppController } = require("../../../../js/controllers");
 // Validation
 const {
     validateGetAppsPayload,
-    validateGetAppPayload,
 } = require("../validation");
 
 
@@ -128,24 +127,6 @@ function convertEnvForFindParams(query)
 
 /*
 app.post("/", function(req, res)
-{
-    const response = new SuccessResponse({
-        message: "Pong",
-    });
-    res.send(response);
-});
-*/
-
-
-
-
-
-/*******
- * PUT *
- *******/
-
-/*
-app.put("/", function(req, res)
 {
     const response = new SuccessResponse({
         message: "Pong",
