@@ -2,7 +2,7 @@ class App
 {
     constructor({
         _id,
-        env,
+        envs,
         searchName,
         displayName,
         data,
@@ -13,7 +13,7 @@ class App
             this._id = _id;
         }
 
-        this.env = (env) ? env : process.env.STAGE;
+        this.envs = (envs) ? envs : [process.env.STAGE];
         this.searchName = searchName;
         this.displayName = displayName;
         this.data = (data) ? data : {};
