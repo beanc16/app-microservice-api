@@ -14,21 +14,23 @@ const {
 
 class MongoControllerHelpers
 {
-	/* 
-	 * GETS
-	 */
+    /* 
+     * GETS
+     */
     
-	static async queryResources({
+    static async queryResources({
         connection,
         findParams,
         collectionName,
         sortOptions,
         Model,
     })
-	{
-		return new Promise(function (resolve, reject)
-		{
-			connection.getCollection({ collectionName })
+    {
+        return new Promise(function (resolve, reject)
+        {
+            findParams = MongoControllerHelpers.convertIdToObjectId(findParams);
+
+            connection.getCollection({ collectionName })
             .then(async function (collection)
             {
                 // Make query
@@ -63,7 +65,9 @@ class MongoControllerHelpers
 	{
 		return new Promise(function (resolve, reject)
 		{
-			connection.getCollection({ collectionName })
+			findParams = MongoControllerHelpers.convertIdToObjectId(findParams);
+
+            connection.getCollection({ collectionName })
             .then(async function (collection)
             {
                 // Make query
@@ -137,6 +141,8 @@ class MongoControllerHelpers
 			connection.getCollection({ collectionName })
             .then(async function (collection)
             {
+                obj = MongoControllerHelpers.convertIdToObjectId(obj);
+
                 // Make query
                 const model = MongoControllerHelpers.getAsModel(obj, Model);
 
@@ -210,7 +216,7 @@ class MongoControllerHelpers
 	 * UTILITY
 	 */
 
-    static parseFindParams(findParams)
+    static convertIdToObjectId(findParams)
     {
         if (findParams._id)
         {
