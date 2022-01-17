@@ -1,4 +1,4 @@
-async function validateJoiSchema({ schema, payload })
+async function validateJoiSchema(schema, payload)
 {
     return new Promise(function (resolve, reject)
     {
