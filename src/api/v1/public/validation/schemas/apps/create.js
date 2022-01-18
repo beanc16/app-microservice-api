@@ -1,33 +1,19 @@
 const Joi = require("joi");
 const { JoiRequired } = require("../../../../../../../custom_modules/JoiHelpers");
-const {
-    envsEnum,
-    joiSchemaSettingsEnum,
-} = require("../../../../../../js/enums");
-const dataSettings = joiSchemaSettingsEnum.apps.data;
+const appSchemas = require("./universalHelpers").appSchemas;
+
+
 
 // Create app
-/*
 const createAppSchema = JoiRequired.object({
-    env: JoiRequired.string().allow(...envsEnum.envs),
-    searchName: JoiRequired.string(),
-    displayName: JoiRequired.string(),
-    data: Joi.object()
-             .max(dataSettings.maxNumOfKeys)
-             .pattern(
-                Joi.string().max(dataSettings.maxKeyLength),  // Keys
-                Joi.alternatives().try(                       // Values
-                    Joi.string().max(dataSettings.maxDataValue.string),
-                    Joi.number().max(dataSettings.maxDataValue.number),
-                    Joi.boolean(),
-                    Joi.date(),
-                ),
-             ),
+    envs: appSchemas.envsArrayRequired,
+    searchName: appSchemas.searchNameStringRequired,
+    displayName: appSchemas.displayNameStringRequired,
+    data: appSchemas.dataObj,
 });
-*/
 
 
 
 module.exports = {
-    //createAppSchema,
+    createAppSchema,
 };
