@@ -1,6 +1,5 @@
 const Joi = require("joi");
 const { JoiRequired } = require("../../../../../../../custom_modules/JoiHelpers");
-const getAppSchemaHelpers = require("./getHelpers");
 const appSchemas = require("./universalHelpers").appSchemas;
 
 
@@ -11,14 +10,14 @@ const getAppsSchema = JoiRequired.alternatives().try(
     JoiRequired.object({
         id: appSchemas.idStringRequired,
         env: appSchemas.envString,
-        searchName: appSchemas.searchName,
+        searchName: appSchemas.searchNameString,
     }),
 
     // By env
     JoiRequired.object({
         id: appSchemas.idString,
         env: appSchemas.envStringRequired,
-        searchName: appSchemas.searchName,
+        searchName: appSchemas.searchNameString,
     }),
 
     // By searchName
@@ -32,5 +31,5 @@ const getAppsSchema = JoiRequired.alternatives().try(
 
 
 module.exports = {
-    getAppsSchema,
+    //getAppsSchema,
 };
