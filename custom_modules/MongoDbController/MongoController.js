@@ -79,7 +79,7 @@ class MongoController
                 collectionName: this.collectionName,
                 Model: this.Model,
             })
-            .then(function (mongoResults)
+            .then((mongoResults) =>
             {
                 if (mongoResults && mongoResults.results)
                 {
@@ -95,17 +95,8 @@ class MongoController
                         "occurred while parsing the results."
                     );
 
-                    let errMsg = "An unknown error occurred in " + 
-                                 "getMostRecent()";
-
-                    if (this.constructor && this.constructor.name)
-                    {
-                        errMsg = "An unknown error occurred in " + 
-                                 this.constructor.name + 
-                                 ".getMostRecent()";
-                    }
-
-                    reject(errMsg);
+                    reject(`An unknown error occurred in ` + 
+                           `${this.name}.getMostRecent()`);
                 }
             })
             .catch(function (errResults)
@@ -136,7 +127,7 @@ class MongoController
                 reject(errors);
             });
 
-            console.info(`Inserting one ${this.Model.constructor.name} into database...`);
+            console.info(`Inserting one ${this.Model.name} into database...`);
 			
 			MongoControllerHelpers.insertOne({
                 connection: this._connection,
@@ -146,12 +137,12 @@ class MongoController
             })
             .then((model) =>
             {
-                console.info(`Successfully inserted one ${this.Model.constructor.name} into database.`);
+                console.info(`Successfully inserted one ${this.Model.name} into database.`);
                 resolve(model);
             })
             .catch((errResults) =>
             {
-                console.error(`Failed to insert one ${this.Model.constructor.name} into database.`, errResults);
+                console.error(`Failed to insert one ${this.Model.name} into database.`, errResults);
                 reject(errResults);
             });
 		});

@@ -79,14 +79,10 @@ class MongoControllerHelpers
                 // Failed query (only happens in findOne)
                 if (!result)
                 {
-                    let errMsg = "No data was found";
-
-                    if (Model && Model.constructor && Model.constructor.name)
-                    {
-                        errMsg = `No ${Model.constructor.name} was found`;
-                    }
-                    
-                    const errResults = new MongoResults({ error: errMsg, status: 500 });
+                    const errResults = new MongoResults({
+                        error: `No ${Model.name} was found`,
+                        status: 500,
+                    });
                     reject(errResults);
                 }
                 
