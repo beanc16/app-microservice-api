@@ -3,7 +3,7 @@ const Joi = require("joi");
 
 
 // Lowercase, -, & _
-const _searchNameRegex = /^[a-z-_]+$/;
+const _searchNameRegex = /^[a-z\-_]+$/;
 
 // Lowercase, -, & _
 const searchNameString = Joi.string()
