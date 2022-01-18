@@ -7,6 +7,12 @@ const express = require("express");
 const app = express();
 
 
+// Access req.body in post requests
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());                         // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
+
 // Controllers
 const { AppController } = require("../../../../js/controllers");
 
@@ -14,6 +20,7 @@ const { AppController } = require("../../../../js/controllers");
 // Validation
 const {
     validateGetAppsPayload,
+    validateCreateAppPayload
 } = require("../validation");
 
 
@@ -125,15 +132,40 @@ function convertEnvForFindParams(query)
  * POSTS *
  *********/
 
-/*
 app.post("/", function(req, res)
 {
-    const response = new SuccessResponse({
-        message: "Pong",
+    validateCreateAppPayload(req.body)
+    .then(function (payload)
+    {
+        AppController.insertOne(req.body)
+        .then(function (data)
+        {
+            const response = new SuccessResponse({
+                res,
+                message: `Successfully created an app named ${req.body.displayName}`,
+                data: data,
+            });
+            res.send(response);
+        })
+        .catch(function (err)
+        {
+            const errResponse = new BadRequestErrorResponse({
+                res,
+                message: `Failed to create an app named ${req.body.displayName}`,
+                err,
+            });
+            res.send(errResponse);
+        });
+    })
+    .catch(function (err)
+    {
+        const errResponse = new ValidationErrorResponse({
+            error: err,
+            res: res,
+        });
+        res.send(errResponse);
     });
-    res.send(response);
 });
-*/
 
 
 

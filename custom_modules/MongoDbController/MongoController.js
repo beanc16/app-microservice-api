@@ -17,16 +17,16 @@ class MongoController
         uri: this.mongoUri,
     });
 
-    
 
-	/* 
-	 * GETS
-	 */
 
-	static async getAll(findParams = { env: process.env.STAGE })
-	{
-		return new Promise(async (resolve, reject) =>
-		{
+    /* 
+     * GETS
+     */
+
+    static async getAll(findParams = { env: process.env.STAGE })
+    {
+        return new Promise(async (resolve, reject) =>
+        {
             await MongoControllerHelpers.validateStaticVariables({
                 collectionName: this.collectionName,
                 Model: this.Model,
@@ -37,9 +37,9 @@ class MongoController
                 reject(errors);
             });
 
-			console.info("Querying resources from database...");
+            console.info("Querying resources from database...");
 
-			MongoControllerHelpers.queryResources({
+            MongoControllerHelpers.queryResources({
                 connection: this._connection,
                 findParams,
                 collectionName: this.collectionName,
@@ -56,13 +56,13 @@ class MongoController
                 console.error("Failed to query resources from database:", errResults);
                 reject(errResults);
             });
-		});
-	}
+        });
+    }
 
-	static async getMostRecent(findParams = { env: process.env.STAGE })
-	{
-		return new Promise(async (resolve, reject) =>
-		{
+    static async getMostRecent(findParams = { env: process.env.STAGE })
+    {
+        return new Promise(async (resolve, reject) =>
+        {
             await MongoControllerHelpers.validateStaticVariables({
                 collectionName: this.collectionName,
                 Model: this.Model,
@@ -73,13 +73,13 @@ class MongoController
                 reject(errors);
             });
 
-			MongoControllerHelpers.queryResource({
+            MongoControllerHelpers.queryResource({
                 connection: this._connection,
                 findParams,
                 collectionName: this.collectionName,
                 Model: this.Model,
             })
-            .then(function (mongoResults)
+            .then((mongoResults) =>
             {
                 if (mongoResults && mongoResults.results)
                 {
@@ -95,17 +95,8 @@ class MongoController
                         "occurred while parsing the results."
                     );
 
-                    let errMsg = "An unknown error occurred in " + 
-                                 "getMostRecent()";
-
-                    if (this.constructor && this.constructor.name)
-                    {
-                        errMsg = "An unknown error occurred in " + 
-                                 this.constructor.name + 
-                                 ".getMostRecent()";
-                    }
-
-                    reject(errMsg);
+                    reject(`An unknown error occurred in ` + 
+                           `${this.name}.getMostRecent()`);
                 }
             })
             .catch(function (errResults)
@@ -113,19 +104,19 @@ class MongoController
                 console.error("Failed to query resources from database:", errResults);
                 resolve(errResults);
             });
-		});
-	}
+        });
+    }
 
 
 
-	/* 
-	 * POSTS
-	 */
+    /* 
+     * POSTS
+     */
 
     static async insertOne(obj)
     {
-		return new Promise(async (resolve, reject) =>
-		{
+        return new Promise(async (resolve, reject) =>
+        {
             await MongoControllerHelpers.validateStaticVariables({
                 collectionName: this.collectionName,
                 Model: this.Model,
@@ -136,25 +127,25 @@ class MongoController
                 reject(errors);
             });
 
-			console.info("Inserting one into database...");
-			
-			MongoControllerHelpers.insertOne({
+            console.info(`Inserting one ${this.Model.name} into database...`);
+
+            MongoControllerHelpers.insertOne({
                 connection: this._connection,
                 obj,
                 collectionName: this.collectionName,
                 Model: this.Model,
             })
-            .then(function (model)
+            .then((model) =>
             {
-                console.info("Successfully inserted one to database.");
+                console.info(`Successfully inserted one ${this.Model.name} into database.`);
                 resolve(model);
             })
-            .catch(function (errResults)
+            .catch((errResults) =>
             {
-                console.error("Failed to insert one to database:", errResults);
+                console.error(`Failed to insert one ${this.Model.name} into database.`, errResults);
                 reject(errResults);
             });
-		});
+        });
     }
 }
 
