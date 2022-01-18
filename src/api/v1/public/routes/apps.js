@@ -68,7 +68,6 @@ app.get("/", function(req, res)
     })
     .catch(function (err)
     {
-        console.log("err:", err);
         const errResponse = new ValidationErrorResponse({
             error: err,
             res: res,
