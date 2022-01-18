@@ -136,7 +136,7 @@ class MongoController
                 reject(errors);
             });
 
-			console.info("Inserting one into database...");
+            console.info(`Inserting one ${this.Model.constructor.name} into database...`);
 			
 			MongoControllerHelpers.insertOne({
                 connection: this._connection,
@@ -144,14 +144,14 @@ class MongoController
                 collectionName: this.collectionName,
                 Model: this.Model,
             })
-            .then(function (model)
+            .then((model) =>
             {
-                console.info("Successfully inserted one to database.");
+                console.info(`Successfully inserted one ${this.Model.constructor.name} into database.`);
                 resolve(model);
             })
-            .catch(function (errResults)
+            .catch((errResults) =>
             {
-                console.error("Failed to insert one to database:", errResults);
+                console.error(`Failed to insert one ${this.Model.constructor.name} into database.`, errResults);
                 reject(errResults);
             });
 		});
