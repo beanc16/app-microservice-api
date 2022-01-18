@@ -133,7 +133,7 @@ function convertEnvForFindParams(query)
  * POSTS *
  *********/
 
-app.post("/create", function(req, res)
+app.post("/", function(req, res)
 {
     validateCreateAppPayload(req.body)
     .then(function (payload)
