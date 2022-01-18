@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const { JoiRequired } = require("../../../../../../../custom_modules/JoiHelpers");
-const appSchemas = require("./universalHelpers").appSchemas;
+const appSchemas = require("./helpers");
 
 
 
