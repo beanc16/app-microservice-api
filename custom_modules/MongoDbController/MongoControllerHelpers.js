@@ -53,19 +53,19 @@ class MongoControllerHelpers
                 const errResults = new MongoResults({ error: err, status: 500 });
                 reject(errResults);
             });
-		});
-	}
+        });
+    }
 
-	static async queryResource({
+    static async queryResource({
         connection,
         findParams,
         collectionName,
         Model,
     })
-	{
-		return new Promise(function (resolve, reject)
-		{
-			findParams = MongoControllerHelpers.convertIdToObjectId(findParams);
+    {
+        return new Promise(function (resolve, reject)
+        {
+            findParams = MongoControllerHelpers.convertIdToObjectId(findParams);
 
             connection.getCollection({ collectionName })
             .then(async function (collection)
@@ -98,43 +98,43 @@ class MongoControllerHelpers
                 const errResults = new MongoResults({ error: err, status: 500 });
                 reject(errResults);
             });
-		});
-	}
-	
-	static getAsModels(array, Model)
-	{
-		const models = [];
-		
-		for (let i = 0; i < array.length; i++)
-		{
-			const model = MongoControllerHelpers.getAsModel(array[i], Model);
-			models.push(model);
-		}
-		
-		return models;
-	}
-	
-	static getAsModel(document, Model)
-	{
-		return new Model(document);
-	}
+        });
+    }
+
+    static getAsModels(array, Model)
+    {
+        const models = [];
+
+        for (let i = 0; i < array.length; i++)
+        {
+            const model = MongoControllerHelpers.getAsModel(array[i], Model);
+            models.push(model);
+        }
+        
+        return models;
+    }
+
+    static getAsModel(document, Model)
+    {
+        return new Model(document);
+    }
 
 
 
-	/* 
-	 * POSTS
-	 */
-    
-	static async insertOne({
+    /* 
+     * POSTS
+     */
+
+    static async insertOne({
         connection,
         obj,
         collectionName,
         Model,
     })
-	{
-		return new Promise(function (resolve, reject)
-		{
-			connection.getCollection({ collectionName })
+    {
+        return new Promise(function (resolve, reject)
+        {
+            connection.getCollection({ collectionName })
             .then(async function (collection)
             {
                 obj = MongoControllerHelpers.convertIdToObjectId(obj);
@@ -164,24 +164,24 @@ class MongoControllerHelpers
                 const errResults = new MongoResults({ error: err, status: 500 });
                 reject(errResults);
             });
-		});
-	}
+        });
+    }
 
 
 
-	/* 
-	 * ERRORS
-	 */
+    /* 
+     * ERRORS
+     */
 
     static validateStaticVariables({
         collectionName,
         Model,
         controllerName,
     })
-	{
-		return new Promise(function (resolve, reject)
-		{
-			console.debug(`Validating ${controllerName} static variables...`);
+    {
+        return new Promise(function (resolve, reject)
+        {
+            console.debug(`Validating ${controllerName} static variables...`);
 
             const errors = [];
 
@@ -203,14 +203,14 @@ class MongoControllerHelpers
 
             console.debug(`${controllerName} static variable validation succeeded.`);
             resolve(true);
-		});
-	}
+        });
+    }
 
 
 
-	/* 
-	 * UTILITY
-	 */
+    /* 
+     * UTILITY
+     */
 
     static convertIdToObjectId(findParams)
     {
