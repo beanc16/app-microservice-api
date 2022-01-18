@@ -17,16 +17,16 @@ class MongoController
         uri: this.mongoUri,
     });
 
-    
 
-	/* 
-	 * GETS
-	 */
 
-	static async getAll(findParams = { env: process.env.STAGE })
-	{
-		return new Promise(async (resolve, reject) =>
-		{
+    /* 
+     * GETS
+     */
+
+    static async getAll(findParams = { env: process.env.STAGE })
+    {
+        return new Promise(async (resolve, reject) =>
+        {
             await MongoControllerHelpers.validateStaticVariables({
                 collectionName: this.collectionName,
                 Model: this.Model,
@@ -37,9 +37,9 @@ class MongoController
                 reject(errors);
             });
 
-			console.info("Querying resources from database...");
+            console.info("Querying resources from database...");
 
-			MongoControllerHelpers.queryResources({
+            MongoControllerHelpers.queryResources({
                 connection: this._connection,
                 findParams,
                 collectionName: this.collectionName,
@@ -56,13 +56,13 @@ class MongoController
                 console.error("Failed to query resources from database:", errResults);
                 reject(errResults);
             });
-		});
-	}
+        });
+    }
 
-	static async getMostRecent(findParams = { env: process.env.STAGE })
-	{
-		return new Promise(async (resolve, reject) =>
-		{
+    static async getMostRecent(findParams = { env: process.env.STAGE })
+    {
+        return new Promise(async (resolve, reject) =>
+        {
             await MongoControllerHelpers.validateStaticVariables({
                 collectionName: this.collectionName,
                 Model: this.Model,
@@ -73,7 +73,7 @@ class MongoController
                 reject(errors);
             });
 
-			MongoControllerHelpers.queryResource({
+            MongoControllerHelpers.queryResource({
                 connection: this._connection,
                 findParams,
                 collectionName: this.collectionName,
@@ -104,19 +104,19 @@ class MongoController
                 console.error("Failed to query resources from database:", errResults);
                 resolve(errResults);
             });
-		});
-	}
+        });
+    }
 
 
 
-	/* 
-	 * POSTS
-	 */
+    /* 
+     * POSTS
+     */
 
     static async insertOne(obj)
     {
-		return new Promise(async (resolve, reject) =>
-		{
+        return new Promise(async (resolve, reject) =>
+        {
             await MongoControllerHelpers.validateStaticVariables({
                 collectionName: this.collectionName,
                 Model: this.Model,
@@ -128,8 +128,8 @@ class MongoController
             });
 
             console.info(`Inserting one ${this.Model.name} into database...`);
-			
-			MongoControllerHelpers.insertOne({
+
+            MongoControllerHelpers.insertOne({
                 connection: this._connection,
                 obj,
                 collectionName: this.collectionName,
@@ -145,7 +145,7 @@ class MongoController
                 console.error(`Failed to insert one ${this.Model.name} into database.`, errResults);
                 reject(errResults);
             });
-		});
+        });
     }
 }
 
