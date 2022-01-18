@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { envsEnum } = require("../../../../../../../js/enums");
+const { envsEnum } = require("../../../../../../../../js/enums");
 
 
 

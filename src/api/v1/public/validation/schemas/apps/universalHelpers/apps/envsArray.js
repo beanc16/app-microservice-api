@@ -1,6 +1,6 @@
 const Joi = require("joi");
-const { envsEnum } = require("../../../../../../../js/enums");
-const { envStringRequired } = require("../universalHelpers");
+const { envsEnum } = require("../../../../../../../../js/enums");
+const { envStringRequired } = require("./envString");
 
 
 
