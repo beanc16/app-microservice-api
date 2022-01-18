@@ -7,7 +7,9 @@ const dataObj = Joi.object()
 .pattern(
     Joi.string().max(100),                                  // Keys
     Joi.alternatives().try(                                 // Values
-        Joi.string().max(500),
+        Joi.string()
+           .min(1)
+           .max(500),
         Joi.number()
            .min(-999999999999999999999999999999)            // 30 digit
            .max(999999999999999999999999999999),            // 30 digit
