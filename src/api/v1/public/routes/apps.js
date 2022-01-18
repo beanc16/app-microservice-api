@@ -142,7 +142,7 @@ app.post("/", function(req, res)
         {
             const response = new SuccessResponse({
                 res,
-                message: `Successfully created app: ${req.body.displayName}`,
+                message: `Successfully created an app named ${req.body.displayName}`,
                 data: data,
             });
             res.send(response);
@@ -151,7 +151,7 @@ app.post("/", function(req, res)
         {
             const errResponse = new BadRequestErrorResponse({
                 res,
-                message: `Failed to create app: ${req.body.displayName}`,
+                message: `Failed to create an app named ${req.body.displayName}`,
                 err,
             });
             res.send(errResponse);
