@@ -133,26 +133,18 @@ function convertEnvForFindParams(query)
  * POSTS *
  *********/
 
-app.post("/", function(req, res)
+app.post("/create", function(req, res)
 {
     validateCreateAppPayload(req.body)
     .then(function (payload)
     {
-        const response = new SuccessResponse({
-            res,
-            message: "Successfully validated payload",
-        });
-        res.send(response);
-        /*
-        const findParams = convertEnvForFindParams(req.query);
-
-        AppController.getAll(findParams)
+        AppController.insertOne(req.body)
         .then(function (data)
         {
             const response = new SuccessResponse({
                 res,
-                message: getSuccessMessageForGetApps(req.query),
-                data: data.results,
+                message: `Successfully created app: ${req.body.displayName}`,
+                data: data,
             });
             res.send(response);
         })
@@ -160,12 +152,11 @@ app.post("/", function(req, res)
         {
             const errResponse = new BadRequestErrorResponse({
                 res,
-                message: "Failed to retrieve all apps",
+                message: `Failed to create app: ${req.body.displayName}`,
                 err,
             });
             res.send(errResponse);
         });
-        */
     })
     .catch(function (err)
     {
