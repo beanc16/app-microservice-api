@@ -4,9 +4,8 @@ const { envStringRequired } = require("./envString");
 
 
 
-const envsArray = Joi.array().items(
-    envStringRequired
-)
+const envsArray = Joi.array()
+.items(envStringRequired)
 .min(1)                                   // At least one env
 .max(envsEnum.envs.length);               // No more than all envs
 
