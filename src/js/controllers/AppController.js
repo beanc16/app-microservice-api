@@ -1,5 +1,5 @@
 const MongoController = require("../../../custom_modules/MongoDbController");
-const { App } = require("../models/index");
+const { App } = require("../models");
 
 
 
