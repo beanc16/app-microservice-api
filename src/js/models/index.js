@@ -1,7 +1,7 @@
-//const myModel = require("./myModel");
+const App = require("./App");
 
 
 
 module.exports = {
-    //myModel,
+    App,
 };

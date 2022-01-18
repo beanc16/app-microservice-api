@@ -1,14 +1,13 @@
-//const { mySchema } = require("../schemas");
-const { validateJoiSchema } = require("../../../../../../custom_modules/JoiHelpers");
+const { createAppSchema } = require("../../schemas");
+const { validateJoiSchema } = require("../../../../../../../custom_modules/JoiHelpers");
 
 
 
-// LabelHere
-function validateMyPayload(payload)
+function validateCreateAppPayload(payload)
 {
     return new Promise(function (resolve, reject)
     {
-        validateJoiSchema(mySchema, payload)
+        validateJoiSchema(createAppSchema, payload)
             .then(function (value)
             {
                 resolve(value);
@@ -23,5 +22,5 @@ function validateMyPayload(payload)
 
 
 module.exports = {
-    //validateMyPayload,
+    validateCreateAppPayload,
 };

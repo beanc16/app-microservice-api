@@ -1,10 +1,10 @@
 class ModelIsInvalidError extends Error
 {
-	constructor()
-	{
-		super("The model is invalid (try checking the casing of parameters)");
-		this.name = "ModelIsInvalidError";
-	}
+    constructor()
+    {
+        super("The model is invalid (try checking the casing of parameters)");
+        this.name = "ModelIsInvalidError";
+    }
 }
 
 

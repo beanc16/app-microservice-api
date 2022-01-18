@@ -18,8 +18,7 @@ const { SuccessResponse } = require("../../../../../custom_modules/Responses");
  * GETS *
  ********/
 
-// Ping
-app.get("/ping", function(req, res)
+app.get("/", function(req, res)
 {
     const response = new SuccessResponse({
         message: "Pong",
@@ -35,7 +34,7 @@ app.get("/ping", function(req, res)
  * POSTS *
  *********/
 
-app.post("/ping", function(req, res)
+app.post("/", function(req, res)
 {
     const response = new SuccessResponse({
         message: "Pong",
@@ -51,7 +50,7 @@ app.post("/ping", function(req, res)
  * PUT *
  *******/
 
-app.put("/ping", function(req, res)
+app.put("/", function(req, res)
 {
     const response = new SuccessResponse({
         message: "Pong",
@@ -67,7 +66,7 @@ app.put("/ping", function(req, res)
  * PATCHES *
  ***********/
 
-app.patch("/ping", function(req, res)
+app.patch("/", function(req, res)
 {
     const response = new SuccessResponse({
         message: "Pong",
@@ -83,7 +82,7 @@ app.patch("/ping", function(req, res)
  * DELETES *
  ***********/
 
-app.delete("/ping", function(req, res)
+app.delete("/", function(req, res)
 {
     const response = new SuccessResponse({
         message: "Pong",
