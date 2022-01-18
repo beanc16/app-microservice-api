@@ -3,6 +3,6 @@
 ## Endpoints
 - [ ] App
   - [x] Get
-  - [ ] Create
+  - [x] Create
   - [ ] Update
   - [ ] Delete
