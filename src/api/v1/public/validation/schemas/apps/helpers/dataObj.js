@@ -8,7 +8,9 @@ const dataObj = Joi.object()
     Joi.string().max(100),                                  // Keys
     Joi.alternatives().try(                                 // Values
         Joi.string().max(500),
-        Joi.number().max(999999999999999999999999999999),   // 30 digit
+        Joi.number()
+           .min(-999999999999999999999999999999)            // 30 digit
+           .max(999999999999999999999999999999),            // 30 digit
         Joi.boolean(),
         Joi.date(),
     ),
