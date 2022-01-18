@@ -31,5 +31,5 @@ const getAppsSchema = JoiRequired.alternatives().try(
 
 
 module.exports = {
-    //getAppsSchema,
+    getAppsSchema,
 };
