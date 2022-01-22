@@ -40,6 +40,16 @@ class MongoControllerHelpers
                 
                 // Done searching, close connection
                 await connection.close();
+
+                // Empty results
+                if (array.length === 0)
+                {
+                    const errResults = new MongoResults({
+                        error: `No ${Model.name}s were found`,
+                        status: 500,
+                    });
+                    reject(errResults);
+                }
                 
                 // Parse array into an array of models
                 const models = MongoControllerHelpers.getAsModels(array, Model);
