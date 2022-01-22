@@ -23,7 +23,7 @@ app.get("/", function(req, res)
     const response = new SuccessResponse({
         message: "Pong",
     });
-    res.send(response);
+    res.json(response);
 });
 
 
@@ -39,7 +39,7 @@ app.post("/", function(req, res)
     const response = new SuccessResponse({
         message: "Pong",
     });
-    res.send(response);
+    res.json(response);
 });
 
 
@@ -55,7 +55,7 @@ app.put("/", function(req, res)
     const response = new SuccessResponse({
         message: "Pong",
     });
-    res.send(response);
+    res.json(response);
 });
 
 
@@ -71,7 +71,7 @@ app.patch("/", function(req, res)
     const response = new SuccessResponse({
         message: "Pong",
     });
-    res.send(response);
+    res.json(response);
 });
 
 
@@ -87,7 +87,7 @@ app.delete("/", function(req, res)
     const response = new SuccessResponse({
         message: "Pong",
     });
-    res.send(response);
+    res.json(response);
 });
 
 

@@ -40,6 +40,16 @@ class MongoControllerHelpers
                 
                 // Done searching, close connection
                 await connection.close();
+
+                // Empty results
+                if (array.length === 0)
+                {
+                    const errResults = new MongoResults({
+                        error: `No ${Model.name}s were found`,
+                        status: 500,
+                    });
+                    reject(errResults);
+                }
                 
                 // Parse array into an array of models
                 const models = MongoControllerHelpers.getAsModels(array, Model);
@@ -170,6 +180,133 @@ class MongoControllerHelpers
 
 
     /* 
+     * PATCHES
+     */
+
+    static async updateOne({
+        connection,
+        findParams,
+        obj,
+        collectionName,
+        Model,
+    })
+    {
+        return new Promise(function (resolve, reject)
+        {
+            connection.getCollection({ collectionName })
+            .then(async function (collection)
+            {
+                findParams = MongoControllerHelpers.convertIdToObjectId(findParams);
+
+                // Make query
+                const validationModel = MongoControllerHelpers.getAsModel(obj, Model);
+
+                // Validation is successful or there is no validation
+                if (!validationModel.isValid || validationModel.isValid())
+                {
+                    // Update (replace the given values for the obj)
+                    const result = await collection.findOneAndUpdate(findParams, {
+                        $set: obj,
+                    });
+
+                    // Done updating, close connection
+                    await connection.close();
+
+                    // Failed query (only happens in findOne)
+                    if (!result || !result.value)
+                    {
+                        const errResults = new MongoResults({
+                            error: `No ${Model.name} was found`,
+                            status: 500,
+                        });
+                        reject(errResults);
+                    }
+                    
+                    // Parse into model
+                    const oldModel = MongoControllerHelpers.getAsModel(result.value, Model);
+
+                    // Add any fields to newModel that weren't changed for output
+                    const newModel = MongoControllerHelpers.addFieldsFromOneModelToOther({
+                        to: obj,
+                        from: oldModel,
+                    });
+                    
+                    // Initialize results
+                    const mongoResults = new MongoResults({
+                        results: {
+                            old: oldModel,
+                            new: newModel,
+                        } 
+                    });
+                    resolve(mongoResults);
+                }
+                else
+                {
+                    reject(new ModelIsInvalidError());
+                }
+            })
+            .catch(function (err)
+            {
+                const errResults = new MongoResults({ error: err, status: 500 });
+                reject(errResults);
+            });
+        });
+    }
+
+
+
+    /* 
+     * DELETES
+     */
+
+    static async deleteOne({
+        connection,
+        findParams,
+        collectionName,
+        Model,
+    })
+    {
+        return new Promise(function (resolve, reject)
+        {
+            connection.getCollection({ collectionName })
+            .then(async function (collection)
+            {
+                findParams = MongoControllerHelpers.convertIdToObjectId(findParams);
+
+                // Delete
+                const result = await collection.findOneAndDelete(findParams);
+
+                // Done updating, close connection
+                await connection.close();
+
+                // Failed query (only happens in findOne)
+                if (!result || !result.value)
+                {
+                    const errResults = new MongoResults({
+                        error: `No ${Model.name} was found`,
+                        status: 500,
+                    });
+                    reject(errResults);
+                }
+                
+                // Parse into model
+                const model = MongoControllerHelpers.getAsModel(result.value, Model);
+                
+                // Initialize results
+                const mongoResults = new MongoResults({ results: model });
+                resolve(mongoResults);
+            })
+            .catch(function (err)
+            {
+                const errResults = new MongoResults({ error: err, status: 500 });
+                reject(errResults);
+            });
+        });
+    }
+
+
+
+    /* 
      * ERRORS
      */
 
@@ -226,6 +363,11 @@ class MongoControllerHelpers
         }
 
         return findParams;
+    }
+
+    static addFieldsFromOneModelToOther({ to, from })
+    {
+        return Object.assign({}, from, to);
     }
 }
 
