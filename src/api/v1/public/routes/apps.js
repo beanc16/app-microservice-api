@@ -30,6 +30,7 @@ const {
     SuccessResponse,
     ValidationErrorResponse,
     BadRequestErrorResponse,
+    InternalServerErrorResponse,
 } = require("../../../../../custom_modules/Responses");
 
 
@@ -61,7 +62,7 @@ app.get("/", function(req, res)
         {
             const errResponse = new BadRequestErrorResponse({
                 res,
-                message: "Failed to retrieve all apps",
+                message: getFailedMessageForGetApps(req.query),
                 err,
             });
             res.json(errResponse);
@@ -81,6 +82,33 @@ app.get("/", function(req, res)
 function getSuccessMessageForGetApps(query)
 {
     let str = "Successfully retrieved all apps";
+
+    if (query.env)
+    {
+        str += ` from ${query.env}`;
+    }
+
+    if (query.searchName)
+    {
+        str += ` named ${query.searchName}`;
+    }
+
+    if (query._id)
+    {
+        str += ` with ID ${query._id}`;
+    }
+    else if (query.id)
+    {
+        str += ` with ID ${query.id}`;
+    }
+
+    return str;
+}
+
+// Get apps - helper
+function getFailedMessageForGetApps(query)
+{
+    let str = "Failed to retrieve all apps";
 
     if (query.env)
     {
@@ -181,33 +209,42 @@ app.patch("/", function(req, res)
     validateUpdateAppPayload(req.body)
     .then(function (payload)
     {
-        const response = new SuccessResponse({
-            res,
-            message: `Successfully validated update app payload`,
-        });
-        res.json(response);
+        const findParams = req.body.old;
+        const updateObj = req.body.new;
 
-        /*
-        AppController.updateOne(req.body)
+        AppController.updateOne(findParams, updateObj)
         .then(function (data)
         {
             const response = new SuccessResponse({
                 res,
-                message: `Successfully created an app named ${req.body.displayName}`,
-                data: data,
+                message: getSuccessMessageForUpdateApps(findParams),
+                data: data.results,
             });
             res.json(response);
         })
         .catch(function (err)
         {
-            const errResponse = new BadRequestErrorResponse({
-                res,
-                message: `Failed to create an app named ${req.body.displayName}`,
-                err,
-            });
-            res.json(errResponse);
+            // Mongo Error
+            if (err && err.status && err.status === 500)
+            {
+                const errResponse = new InternalServerErrorResponse({
+                    res,
+                    message: getFailedMessageForGettingAppOnUpdate(findParams),
+                });
+                res.json(errResponse);
+            }
+
+            // Other error
+            else
+            {
+                const errResponse = new BadRequestErrorResponse({
+                    res,
+                    message: getFailedMessageForUpdateApps(findParams),
+                    err,
+                });
+                res.json(errResponse);
+            }
         });
-        */
     })
     .catch(function (err)
     {
@@ -218,6 +255,72 @@ app.patch("/", function(req, res)
         res.json(errResponse);
     });
 });
+
+// Update apps - helper
+function getSuccessMessageForUpdateApps(findParams)
+{
+    let str = "Successfully updated an app";
+
+    if (findParams.searchName)
+    {
+        str += ` named ${findParams.searchName}`;
+    }
+
+    if (findParams._id)
+    {
+        str += ` with ID ${findParams._id}`;
+    }
+    else if (findParams.id)
+    {
+        str += ` with ID ${findParams.id}`;
+    }
+
+    return str;
+}
+
+// Get apps - helper
+function getFailedMessageForGettingAppOnUpdate(query)
+{
+    let str = "Failed to retrieve an app";
+
+    if (query.searchName)
+    {
+        str += ` named ${query.searchName}`;
+    }
+
+    if (query._id)
+    {
+        str += ` with ID ${query._id}`;
+    }
+    else if (query.id)
+    {
+        str += ` with ID ${query.id}`;
+    }
+
+    return str;
+}
+
+// Update apps - helper
+function getFailedMessageForUpdateApps(findParams)
+{
+    let str = "Failed to update an app";
+
+    if (findParams.searchName)
+    {
+        str += ` named ${findParams.searchName}`;
+    }
+
+    if (findParams._id)
+    {
+        str += ` with ID ${findParams._id}`;
+    }
+    else if (findParams.id)
+    {
+        str += ` with ID ${findParams.id}`;
+    }
+
+    return str;
+}
 
 
 
