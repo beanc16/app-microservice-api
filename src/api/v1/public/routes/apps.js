@@ -60,12 +60,26 @@ app.get("/", function(req, res)
         })
         .catch(function (err)
         {
-            const errResponse = new BadRequestErrorResponse({
-                res,
-                message: getFailedMessageForGetApps(req.query),
-                err,
-            });
-            res.json(errResponse);
+            // Mongo Error
+            if (err && err.status && err.status === 500)
+            {
+                const errResponse = new InternalServerErrorResponse({
+                    res,
+                    message: getGetMessageForNoAppsFound(req.query),
+                });
+                res.json(errResponse);
+            }
+
+            // Other error
+            else
+            {
+                const errResponse = new BadRequestErrorResponse({
+                    res,
+                    message: getFailedMessageForGetApps(req.query),
+                    err,
+                });
+                res.json(errResponse);
+            }
         });
     })
     .catch(function (err)
@@ -82,6 +96,33 @@ app.get("/", function(req, res)
 function getSuccessMessageForGetApps(query)
 {
     let str = "Successfully retrieved all apps";
+
+    if (query.env)
+    {
+        str += ` from ${query.env}`;
+    }
+
+    if (query.searchName)
+    {
+        str += ` named ${query.searchName}`;
+    }
+
+    if (query._id)
+    {
+        str += ` with ID ${query._id}`;
+    }
+    else if (query.id)
+    {
+        str += ` with ID ${query.id}`;
+    }
+
+    return str;
+}
+
+// Get apps - helper
+function getGetMessageForNoAppsFound(query)
+{
+    let str = "No apps were found";
 
     if (query.env)
     {
@@ -229,7 +270,7 @@ app.patch("/", function(req, res)
             {
                 const errResponse = new InternalServerErrorResponse({
                     res,
-                    message: getFailedMessageForGettingAppOnUpdate(findParams),
+                    message: getUpdateMessageForNoAppsFound(findParams),
                 });
                 res.json(errResponse);
             }
@@ -279,7 +320,7 @@ function getSuccessMessageForUpdateApps(findParams)
 }
 
 // Get apps - helper
-function getFailedMessageForGettingAppOnUpdate(query)
+function getUpdateMessageForNoAppsFound(query)
 {
     let str = "Failed to retrieve an app";
 
