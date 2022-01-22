@@ -4,5 +4,5 @@
 - [ ] App
   - [x] Get
   - [x] Create
-  - [ ] Update
+  - [x] Update
   - [ ] Delete
