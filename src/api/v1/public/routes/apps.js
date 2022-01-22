@@ -20,7 +20,8 @@ const { AppController } = require("../../../../js/controllers");
 // Validation
 const {
     validateGetAppsPayload,
-    validateCreateAppPayload
+    validateCreateAppPayload,
+    validateUpdateAppPayload,
 } = require("../validation");
 
 
@@ -175,15 +176,49 @@ app.post("/", function(req, res)
  * PATCHES *
  ***********/
 
-/*
 app.patch("/", function(req, res)
 {
-    const response = new SuccessResponse({
-        message: "Pong",
+    validateUpdateAppPayload(req.body)
+    .then(function (payload)
+    {
+        const response = new SuccessResponse({
+            res,
+            message: `Successfully validated update app payload`,
+        });
+        res.send(response);
+        //res.json(response);
+
+        /*
+        AppController.updateOne(req.body)
+        .then(function (data)
+        {
+            const response = new SuccessResponse({
+                res,
+                message: `Successfully created an app named ${req.body.displayName}`,
+                data: data,
+            });
+            res.send(response);
+        })
+        .catch(function (err)
+        {
+            const errResponse = new BadRequestErrorResponse({
+                res,
+                message: `Failed to create an app named ${req.body.displayName}`,
+                err,
+            });
+            res.send(errResponse);
+        });
+        */
+    })
+    .catch(function (err)
+    {
+        const errResponse = new ValidationErrorResponse({
+            error: err,
+            res: res,
+        });
+        res.send(errResponse);
     });
-    res.send(response);
 });
-*/
 
 
 
