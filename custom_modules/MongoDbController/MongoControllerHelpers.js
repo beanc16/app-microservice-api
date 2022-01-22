@@ -232,16 +232,69 @@ class MongoControllerHelpers
                     });
                     
                     // Initialize results
-                    const mongoResults = new MongoResults({ results: {
-                        old: oldModel,
-                        new: newModel,
-                    } });
+                    const mongoResults = new MongoResults({
+                        results: {
+                            old: oldModel,
+                            new: newModel,
+                        } 
+                    });
                     resolve(mongoResults);
                 }
                 else
                 {
                     reject(new ModelIsInvalidError());
                 }
+            })
+            .catch(function (err)
+            {
+                const errResults = new MongoResults({ error: err, status: 500 });
+                reject(errResults);
+            });
+        });
+    }
+
+
+
+    /* 
+     * DELETES
+     */
+
+    static async deleteOne({
+        connection,
+        findParams,
+        collectionName,
+        Model,
+    })
+    {
+        return new Promise(function (resolve, reject)
+        {
+            connection.getCollection({ collectionName })
+            .then(async function (collection)
+            {
+                findParams = MongoControllerHelpers.convertIdToObjectId(findParams);
+
+                // Delete
+                const result = await collection.findOneAndDelete(findParams);
+
+                // Done updating, close connection
+                await connection.close();
+
+                // Failed query (only happens in findOne)
+                if (!result || !result.value)
+                {
+                    const errResults = new MongoResults({
+                        error: `No ${Model.name} was found`,
+                        status: 500,
+                    });
+                    reject(errResults);
+                }
+                
+                // Parse into model
+                const model = MongoControllerHelpers.getAsModel(result.value, Model);
+                
+                // Initialize results
+                const mongoResults = new MongoResults({ results: model });
+                resolve(mongoResults);
             })
             .catch(function (err)
             {

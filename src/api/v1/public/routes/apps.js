@@ -22,6 +22,7 @@ const {
     validateGetAppsPayload,
     validateCreateAppPayload,
     validateUpdateAppPayload,
+    validateDeleteAppPayload,
 } = require("../validation");
 
 
@@ -319,7 +320,7 @@ function getSuccessMessageForUpdateApps(findParams)
     return str;
 }
 
-// Get apps - helper
+// Update apps - helper
 function getUpdateMessageForNoAppsFound(query)
 {
     let str = "Failed to retrieve an app";
@@ -371,15 +372,120 @@ function getFailedMessageForUpdateApps(findParams)
  * DELETES *
  ***********/
 
-/*
 app.delete("/", function(req, res)
 {
-    const response = new SuccessResponse({
-        message: "Pong",
+    validateDeleteAppPayload(req.body)
+    .then(function (payload)
+    {
+        AppController.deleteOne(req.body)
+        .then(function (data)
+        {
+            const response = new SuccessResponse({
+                res,
+                message: getSuccessMessageForDeleteApps(req.body),
+                data: data.results,
+            });
+            res.json(response);
+        })
+        .catch(function (err)
+        {
+            // Mongo Error
+            if (err && err.status && err.status === 500)
+            {
+                const errResponse = new InternalServerErrorResponse({
+                    res,
+                    message: getDeleteMessageForNoAppsFound(req.body),
+                });
+                res.json(errResponse);
+            }
+
+            // Other error
+            else
+            {
+                const errResponse = new BadRequestErrorResponse({
+                    res,
+                    message: getFailedMessageForDeleteApps(req.body),
+                    err,
+                });
+                res.json(errResponse);
+            }
+        });
+    })
+    .catch(function (err)
+    {
+        const errResponse = new ValidationErrorResponse({
+            error: err,
+            res: res,
+        });
+        res.json(errResponse);
     });
-    res.json(response);
 });
-*/
+
+// Delete apps - helper
+function getSuccessMessageForDeleteApps(findParams)
+{
+    let str = "Successfully deleted an app";
+
+    if (findParams.searchName)
+    {
+        str += ` named ${findParams.searchName}`;
+    }
+
+    if (findParams._id)
+    {
+        str += ` with ID ${findParams._id}`;
+    }
+    else if (findParams.id)
+    {
+        str += ` with ID ${findParams.id}`;
+    }
+
+    return str;
+}
+
+// Delete apps - helper
+function getDeleteMessageForNoAppsFound(query)
+{
+    let str = "Failed to retrieve an app";
+
+    if (query.searchName)
+    {
+        str += ` named ${query.searchName}`;
+    }
+
+    if (query._id)
+    {
+        str += ` with ID ${query._id}`;
+    }
+    else if (query.id)
+    {
+        str += ` with ID ${query.id}`;
+    }
+
+    return str;
+}
+
+// Delete apps - helper
+function getFailedMessageForDeleteApps(findParams)
+{
+    let str = "Failed to delete an app";
+
+    if (findParams.searchName)
+    {
+        str += ` named ${findParams.searchName}`;
+    }
+
+    if (findParams._id)
+    {
+        str += ` with ID ${findParams._id}`;
+    }
+    else if (findParams.id)
+    {
+        str += ` with ID ${findParams.id}`;
+    }
+
+    return str;
+}
 
 
 
