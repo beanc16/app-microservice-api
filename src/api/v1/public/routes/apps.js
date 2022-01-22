@@ -270,7 +270,7 @@ app.patch("/", function(req, res)
             {
                 const errResponse = new InternalServerErrorResponse({
                     res,
-                    message: getFailedMessageForGettingAppOnUpdate(findParams),
+                    message: getUpdateMessageForNoAppsFound(findParams),
                 });
                 res.json(errResponse);
             }
@@ -320,7 +320,7 @@ function getSuccessMessageForUpdateApps(findParams)
 }
 
 // Get apps - helper
-function getFailedMessageForGettingAppOnUpdate(query)
+function getUpdateMessageForNoAppsFound(query)
 {
     let str = "Failed to retrieve an app";
 
