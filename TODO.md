@@ -1,8 +1,8 @@
 # To Do
 
 ## Endpoints
-- [ ] App
+- [x] App
   - [x] Get
   - [x] Create
   - [x] Update
-  - [ ] Delete
+  - [x] Delete
