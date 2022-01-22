@@ -280,7 +280,7 @@ class MongoControllerHelpers
                 await connection.close();
 
                 // Failed query (only happens in findOne)
-                if (!result)
+                if (!result || !result.value)
                 {
                     const errResults = new MongoResults({
                         error: `No ${Model.name} was found`,
@@ -290,7 +290,7 @@ class MongoControllerHelpers
                 }
                 
                 // Parse into model
-                const model = MongoControllerHelpers.getAsModel(result, Model);
+                const model = MongoControllerHelpers.getAsModel(result.value, Model);
                 
                 // Initialize results
                 const mongoResults = new MongoResults({ results: model });
