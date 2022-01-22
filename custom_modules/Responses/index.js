@@ -1,15 +1,13 @@
 const Response = require("./Response");
-const SuccessResponse = require("./SuccessResponse");
-const ValidationErrorResponse = require("./ValidationErrorResponse");
-const BadRequestErrorResponse = require("./BadRequestErrorResponse");
-const InvalidUrlErrorResponse = require("./InvalidUrlErrorResponse");
+const response200s = require("./200s");
+const response400s = require("./400s");
+const response500s = require("./500s");
 
 
 
 module.exports = {
     Response,
-    SuccessResponse,
-    ValidationErrorResponse,
-    BadRequestErrorResponse,
-    InvalidUrlErrorResponse,
+    ...response200s,
+    ...response400s,
+    ...response500s,
 };

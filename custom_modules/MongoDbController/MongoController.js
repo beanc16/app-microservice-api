@@ -142,7 +142,49 @@ class MongoController
             })
             .catch((errResults) =>
             {
-                console.error(`Failed to insert one ${this.Model.name} into database.`, errResults);
+                console.error(`Failed to insert one ${this.Model.name} into database:`, errResults);
+                reject(errResults);
+            });
+        });
+    }
+
+
+
+    /* 
+     * PATCHES
+     */
+
+    static async updateOne(findParams, obj)
+    {
+        return new Promise(async (resolve, reject) =>
+        {
+            await MongoControllerHelpers.validateStaticVariables({
+                collectionName: this.collectionName,
+                Model: this.Model,
+                controllerName: this.name,
+            })
+            .catch(function (errors)
+            {
+                reject(errors);
+            });
+
+            console.info(`Updating one ${this.Model.name} in database...`);
+
+            MongoControllerHelpers.updateOne({
+                connection: this._connection,
+                findParams,
+                obj,
+                collectionName: this.collectionName,
+                Model: this.Model,
+            })
+            .then((model) =>
+            {
+                console.info(`Successfully updated one ${this.Model.name} in database.`);
+                resolve(model);
+            })
+            .catch((errResults) =>
+            {
+                console.error(`Failed to update one ${this.Model.name} in database:`, errResults);
                 reject(errResults);
             });
         });
