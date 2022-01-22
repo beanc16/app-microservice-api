@@ -6,3 +6,8 @@
   - [x] Create
   - [x] Update
   - [x] Delete
+
+## Packages
+- [ ] dotnet-responses
+  - [ ] Install
+  - [ ] Implement
