@@ -21,7 +21,7 @@ const { InvalidUrlErrorResponse } = require("../../custom_modules/Responses");
 app.get("/*", function(req, res)
 {
     const errResponse = new InvalidUrlErrorResponse({ res });
-    res.send(errResponse);
+    res.json(errResponse);
 });
 
 
@@ -35,7 +35,7 @@ app.get("/*", function(req, res)
 app.post("/*", function(req, res)
 {
     const errResponse = new InvalidUrlErrorResponse({ res });
-    res.send(errResponse);
+    res.json(errResponse);
 });
 
 
@@ -48,8 +48,8 @@ app.post("/*", function(req, res)
 
 app.put("/*", function(req, res)
 {
-    const err = new InvalidUrlErrorResponse({ res });
-    res.send(err);
+    const errResponse = new InvalidUrlErrorResponse({ res });
+    res.json(errResponse);
 });
 
 
@@ -62,8 +62,8 @@ app.put("/*", function(req, res)
 
 app.patch("/*", function(req, res)
 {
-    const err = new InvalidUrlErrorResponse({ res });
-    res.send(err);
+    const errResponse = new InvalidUrlErrorResponse({ res });
+    res.json(errResponse);
 });
 
 
@@ -76,8 +76,8 @@ app.patch("/*", function(req, res)
 
 app.delete("/*", function(req, res)
 {
-    const err = new InvalidUrlErrorResponse({ res });
-    res.send(err);
+    const errResponse = new InvalidUrlErrorResponse({ res });
+    res.json(errResponse);
 });
 
 

@@ -55,7 +55,7 @@ app.get("/", function(req, res)
                 message: getSuccessMessageForGetApps(req.query),
                 data: data.results,
             });
-            res.send(response);
+            res.json(response);
         })
         .catch(function (err)
         {
@@ -64,7 +64,7 @@ app.get("/", function(req, res)
                 message: "Failed to retrieve all apps",
                 err,
             });
-            res.send(errResponse);
+            res.json(errResponse);
         });
     })
     .catch(function (err)
@@ -73,7 +73,7 @@ app.get("/", function(req, res)
             error: err,
             res: res,
         });
-        res.send(errResponse);
+        res.json(errResponse);
     });
 });
 
@@ -146,7 +146,7 @@ app.post("/", function(req, res)
                 message: `Successfully created an app named ${req.body.displayName}`,
                 data: data,
             });
-            res.send(response);
+            res.json(response);
         })
         .catch(function (err)
         {
@@ -155,7 +155,7 @@ app.post("/", function(req, res)
                 message: `Failed to create an app named ${req.body.displayName}`,
                 err,
             });
-            res.send(errResponse);
+            res.json(errResponse);
         });
     })
     .catch(function (err)
@@ -164,7 +164,7 @@ app.post("/", function(req, res)
             error: err,
             res: res,
         });
-        res.send(errResponse);
+        res.json(errResponse);
     });
 });
 
@@ -185,8 +185,7 @@ app.patch("/", function(req, res)
             res,
             message: `Successfully validated update app payload`,
         });
-        res.send(response);
-        //res.json(response);
+        res.json(response);
 
         /*
         AppController.updateOne(req.body)
@@ -197,7 +196,7 @@ app.patch("/", function(req, res)
                 message: `Successfully created an app named ${req.body.displayName}`,
                 data: data,
             });
-            res.send(response);
+            res.json(response);
         })
         .catch(function (err)
         {
@@ -206,7 +205,7 @@ app.patch("/", function(req, res)
                 message: `Failed to create an app named ${req.body.displayName}`,
                 err,
             });
-            res.send(errResponse);
+            res.json(errResponse);
         });
         */
     })
@@ -216,7 +215,7 @@ app.patch("/", function(req, res)
             error: err,
             res: res,
         });
-        res.send(errResponse);
+        res.json(errResponse);
     });
 });
 
@@ -234,7 +233,7 @@ app.delete("/", function(req, res)
     const response = new SuccessResponse({
         message: "Pong",
     });
-    res.send(response);
+    res.json(response);
 });
 */
 
