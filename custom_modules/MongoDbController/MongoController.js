@@ -189,6 +189,47 @@ class MongoController
             });
         });
     }
+
+
+
+    /* 
+     * DELETES
+     */
+
+    static async deleteOne(findParams)
+    {
+        return new Promise(async (resolve, reject) =>
+        {
+            await MongoControllerHelpers.validateStaticVariables({
+                collectionName: this.collectionName,
+                Model: this.Model,
+                controllerName: this.name,
+            })
+            .catch(function (errors)
+            {
+                reject(errors);
+            });
+
+            console.info(`Deleting one ${this.Model.name} from database...`);
+
+            MongoControllerHelpers.deleteOne({
+                connection: this._connection,
+                findParams,
+                collectionName: this.collectionName,
+                Model: this.Model,
+            })
+            .then((model) =>
+            {
+                console.info(`Successfully deleted one ${this.Model.name} from database.`);
+                resolve(model);
+            })
+            .catch((errResults) =>
+            {
+                console.error(`Failed to delete one ${this.Model.name} from database:`, errResults);
+                reject(errResults);
+            });
+        });
+    }
 }
 
 
