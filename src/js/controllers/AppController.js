@@ -1,9 +1,9 @@
-const MongoController = require("../../../custom_modules/MongoDbController");
+const { MongoDbControllerWithEnv } = require("mongodb-controller");
 const { App } = require("../models");
 
 
 
-class AppController extends MongoController
+class AppController extends MongoDbControllerWithEnv
 {
     static collectionName = process.env.COLLECTION_APPS;
     static Model = App;

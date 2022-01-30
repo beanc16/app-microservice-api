@@ -248,7 +248,7 @@ app.patch("/", function(req, res)
         const findParams = req.body.old;
         const updateObj = req.body.new;
 
-        AppController.updateOne(findParams, updateObj)
+        AppController.findOneAndUpdate(findParams, updateObj)
         .then(function (data)
         {
             Success.json({
@@ -367,7 +367,7 @@ app.delete("/", function(req, res)
     validateDeleteAppPayload(req.body)
     .then(function (payload)
     {
-        AppController.deleteOne(req.body)
+        AppController.findOneAndDelete(req.body)
         .then(function (data)
         {
             Success.json({
