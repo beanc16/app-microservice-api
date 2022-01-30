@@ -14,3 +14,9 @@
 - [ ] Mongo Controller
   - [ ] Install
   - [ ] Implement
+
+## Security
+- [ ] Research
+- [ ] API Keys?
+- [ ] JWT Tokens? 
+- [ ] Make v2 with security
