@@ -26,13 +26,13 @@ const {
 } = require("../validation");
 
 
-// Custom variables
+// Response
 const {
-    SuccessResponse,
-    ValidationErrorResponse,
-    BadRequestErrorResponse,
-    InternalServerErrorResponse,
-} = require("../../../../../custom_modules/Responses");
+    Success,
+    ValidationError,
+    BadRequest,
+    InternalServerError,
+} = require("dotnet-responses");
 
 
 
@@ -52,44 +52,41 @@ app.get("/", function(req, res)
         AppController.getAll(findParams)
         .then(function (data)
         {
-            const response = new SuccessResponse({
+            Success.json({
                 res,
                 message: getSuccessMessageForGetApps(req.query),
                 data: data.results,
             });
-            res.json(response);
         })
         .catch(function (err)
         {
             // Mongo Error
             if (err && err.status && err.status === 500)
             {
-                const errResponse = new InternalServerErrorResponse({
+                InternalServerError.json({
                     res,
                     message: getGetMessageForNoAppsFound(req.query),
                 });
-                res.json(errResponse);
             }
 
             // Other error
             else
             {
-                const errResponse = new BadRequestErrorResponse({
+                BadRequest.json({
                     res,
                     message: getFailedMessageForGetApps(req.query),
                     err,
                 });
-                res.json(errResponse);
             }
         });
     })
     .catch(function (err)
     {
-        const errResponse = new ValidationErrorResponse({
+        ValidationError.json({
+            res,
+            message: "Query Validation Error",
             error: err,
-            res: res,
         });
-        res.json(errResponse);
     });
 });
 
@@ -211,30 +208,27 @@ app.post("/", function(req, res)
         AppController.insertOne(req.body)
         .then(function (data)
         {
-            const response = new SuccessResponse({
+            Success.json({
                 res,
                 message: `Successfully created an app named ${req.body.displayName}`,
                 data: data,
             });
-            res.json(response);
         })
         .catch(function (err)
         {
-            const errResponse = new BadRequestErrorResponse({
+            BadRequest.json({
                 res,
                 message: `Failed to create an app named ${req.body.displayName}`,
                 err,
             });
-            res.json(errResponse);
         });
     })
     .catch(function (err)
     {
-        const errResponse = new ValidationErrorResponse({
+        ValidationError.json({
+            res,
             error: err,
-            res: res,
         });
-        res.json(errResponse);
     });
 });
 
@@ -257,44 +251,40 @@ app.patch("/", function(req, res)
         AppController.updateOne(findParams, updateObj)
         .then(function (data)
         {
-            const response = new SuccessResponse({
+            Success.json({
                 res,
                 message: getSuccessMessageForUpdateApps(findParams),
                 data: data.results,
             });
-            res.json(response);
         })
         .catch(function (err)
         {
             // Mongo Error
             if (err && err.status && err.status === 500)
             {
-                const errResponse = new InternalServerErrorResponse({
+                InternalServerError.json({
                     res,
                     message: getUpdateMessageForNoAppsFound(findParams),
                 });
-                res.json(errResponse);
             }
 
             // Other error
             else
             {
-                const errResponse = new BadRequestErrorResponse({
+                BadRequest.json({
                     res,
                     message: getFailedMessageForUpdateApps(findParams),
                     err,
                 });
-                res.json(errResponse);
             }
         });
     })
     .catch(function (err)
     {
-        const errResponse = new ValidationErrorResponse({
+        ValidationError.json({
+            res,
             error: err,
-            res: res,
         });
-        res.json(errResponse);
     });
 });
 
@@ -380,44 +370,40 @@ app.delete("/", function(req, res)
         AppController.deleteOne(req.body)
         .then(function (data)
         {
-            const response = new SuccessResponse({
+            Success.json({
                 res,
                 message: getSuccessMessageForDeleteApps(req.body),
                 data: data.results,
             });
-            res.json(response);
         })
         .catch(function (err)
         {
             // Mongo Error
             if (err && err.status && err.status === 500)
             {
-                const errResponse = new InternalServerErrorResponse({
+                InternalServerError.json({
                     res,
                     message: getDeleteMessageForNoAppsFound(req.body),
                 });
-                res.json(errResponse);
             }
 
             // Other error
             else
             {
-                const errResponse = new BadRequestErrorResponse({
+                BadRequest.json({
                     res,
                     message: getFailedMessageForDeleteApps(req.body),
                     err,
                 });
-                res.json(errResponse);
             }
         });
     })
     .catch(function (err)
     {
-        const errResponse = new ValidationErrorResponse({
+        ValidationError.json({
+            res,
             error: err,
-            res: res,
         });
-        res.json(errResponse);
     });
 });
 

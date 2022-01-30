@@ -7,8 +7,8 @@ const express = require("express");
 const app = express();
 
 
-// Custom variables
-const { SuccessResponse } = require("../../../../../custom_modules/Responses");
+// Response
+const { Success } = require("dotnet-responses");
 
 
 
@@ -20,10 +20,10 @@ const { SuccessResponse } = require("../../../../../custom_modules/Responses");
 
 app.get("/", function(req, res)
 {
-    const response = new SuccessResponse({
-        message: "Pong",
+    Success.json({
+        res,
+        message: "Pong"
     });
-    res.json(response);
 });
 
 
@@ -36,10 +36,10 @@ app.get("/", function(req, res)
 
 app.post("/", function(req, res)
 {
-    const response = new SuccessResponse({
-        message: "Pong",
+    Success.json({
+        res,
+        message: "Pong"
     });
-    res.json(response);
 });
 
 
@@ -52,10 +52,10 @@ app.post("/", function(req, res)
 
 app.put("/", function(req, res)
 {
-    const response = new SuccessResponse({
-        message: "Pong",
+    Success.json({
+        res,
+        message: "Pong"
     });
-    res.json(response);
 });
 
 
@@ -68,10 +68,10 @@ app.put("/", function(req, res)
 
 app.patch("/", function(req, res)
 {
-    const response = new SuccessResponse({
-        message: "Pong",
+    Success.json({
+        res,
+        message: "Pong"
     });
-    res.json(response);
 });
 
 
@@ -84,10 +84,10 @@ app.patch("/", function(req, res)
 
 app.delete("/", function(req, res)
 {
-    const response = new SuccessResponse({
-        message: "Pong",
+    Success.json({
+        res,
+        message: "Pong"
     });
-    res.json(response);
 });
 
 
