@@ -6,3 +6,20 @@
   - [x] Create
   - [x] Update
   - [x] Delete
+
+## Packages
+- [x] dotnet-responses
+  - [x] Install
+  - [x] Implement
+- [x] Mongo DB Controller
+  - [x] Install
+  - [x] Implement
+- [ ] @beanc16/joi-helpers
+  - [x] Install
+  - [ ] Implement
+
+## Security
+- [ ] Research
+- [ ] API Keys?
+- [ ] JWT Tokens? 
+- [ ] Make v2 with security

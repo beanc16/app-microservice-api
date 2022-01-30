@@ -1,5 +1,5 @@
 const { createAppSchema } = require("../../schemas");
-const { validateJoiSchema } = require("../../../../../../../custom_modules/JoiHelpers");
+const { validateJoiSchema } = require("@beanc16/joi-helpers");
 
 
 
