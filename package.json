@@ -16,6 +16,7 @@
     "express": "^4.17.2",
     "joi": "^17.5.0",
     "mongodb": "^4.3.0",
+    "mongodb-controller": "^0.2.0",
     "nodemon": "^2.0.15"
   }
 }
