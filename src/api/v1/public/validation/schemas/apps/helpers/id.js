@@ -1,9 +1,10 @@
 const Joi = require("joi");
+const { JoiMongoDb } = require("@beanc16/joi-helpers");
 
 
 
 // MongoDB ObjectIds are 24 characters long
-const idString = Joi.string().length(24);
+const idString = JoiMongoDb.string().objectId();
 const idStringRequired = idString.required();
 
 
