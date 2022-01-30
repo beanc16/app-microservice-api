@@ -7,8 +7,8 @@ const express = require("express");
 const app = express();
 
 
-// Custom variables
-const { InvalidUrlErrorResponse } = require("../../custom_modules/Responses");
+// Response
+const { InvalidUrl } = require("dotnet-responses");
 
 
 
@@ -20,8 +20,7 @@ const { InvalidUrlErrorResponse } = require("../../custom_modules/Responses");
 
 app.get("/*", function(req, res)
 {
-    const errResponse = new InvalidUrlErrorResponse({ res });
-    res.json(errResponse);
+    InvalidUrl.json({ res });
 });
 
 
@@ -34,8 +33,7 @@ app.get("/*", function(req, res)
 
 app.post("/*", function(req, res)
 {
-    const errResponse = new InvalidUrlErrorResponse({ res });
-    res.json(errResponse);
+    InvalidUrl.json({ res });
 });
 
 
@@ -48,8 +46,7 @@ app.post("/*", function(req, res)
 
 app.put("/*", function(req, res)
 {
-    const errResponse = new InvalidUrlErrorResponse({ res });
-    res.json(errResponse);
+    InvalidUrl.json({ res });
 });
 
 
@@ -62,8 +59,7 @@ app.put("/*", function(req, res)
 
 app.patch("/*", function(req, res)
 {
-    const errResponse = new InvalidUrlErrorResponse({ res });
-    res.json(errResponse);
+    InvalidUrl.json({ res });
 });
 
 
@@ -76,8 +72,7 @@ app.patch("/*", function(req, res)
 
 app.delete("/*", function(req, res)
 {
-    const errResponse = new InvalidUrlErrorResponse({ res });
-    res.json(errResponse);
+    InvalidUrl.json({ res });
 });
 
 
