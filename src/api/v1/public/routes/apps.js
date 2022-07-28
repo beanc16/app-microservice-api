@@ -32,6 +32,7 @@ const {
     ValidationError,
     BadRequest,
     InternalServerError,
+    getResponseByStatusCode,
 } = require("dotnet-responses");
 
 
@@ -60,24 +61,29 @@ app.get("/", function(req, res)
         })
         .catch(function (err)
         {
+            let ResponseClass;
+            const response = { res };
+
             // Mongo Error
-            if (err && err.status && err.status === 500)
+            if (err && err.status)
             {
-                InternalServerError.json({
-                    res,
-                    message: getGetMessageForNoAppsFound(req.query),
-                });
+                ResponseClass = getResponseByStatusCode(err.status) || InternalServerError;
+                
+                if (err.status === 500)
+                {
+                    err.message = getGetMessageForNoAppsFound(req.query);
+                }
             }
 
             // Other error
             else
             {
-                BadRequest.json({
-                    res,
-                    message: getFailedMessageForGetApps(req.query),
-                    err,
-                });
+                ResponseClass = BadRequest;
+                response.message = getFailedMessageForGetApps(req.query);
+                response.err = err;
             }
+
+            ResponseClass.json(response);
         });
     })
     .catch(function (err)
@@ -205,14 +211,31 @@ app.post("/", function(req, res)
     validateCreateAppPayload(req.body)
     .then(function (payload)
     {
-        AppController.insertOne(req.body)
+        AppController.insertOneIfNotExists({
+            searchName: req.body.searchName,
+        }, req.body)
         .then(function (data)
         {
-            Success.json({
-                res,
-                message: `Successfully created an app named ${req.body.displayName}`,
-                data: data,
-            });
+            const { model, result } = data.results;
+
+            // Inserted successfully
+            if (result.upsertedId)
+            {
+                Success.json({
+                    res,
+                    message: `Successfully created an app named ${req.body.displayName}`,
+                    data: model,
+                });
+            }
+
+            // App already exists
+            else
+            {
+                BadRequest.json({
+                    res,
+                    message: `An app with a searchName of ${req.body.searchName} already exists`,
+                });
+            }
         })
         .catch(function (err)
         {

@@ -14,9 +14,9 @@
 - [x] Mongo DB Controller
   - [x] Install
   - [x] Implement
-- [ ] @beanc16/joi-helpers
+- [x] @beanc16/joi-helpers
   - [x] Install
-  - [ ] Implement
+  - [x] Implement
 
 ## Security
 - [ ] Research
