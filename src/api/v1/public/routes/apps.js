@@ -29,10 +29,11 @@ const {
 // Response
 const {
     Success,
-    ValidationError,
     BadRequest,
+    NotFound,
+    Conflict,
+    ValidationError,
     InternalServerError,
-    getResponseByStatusCode,
 } = require("dotnet-responses");
 
 
@@ -53,37 +54,36 @@ app.get("/", function(req, res)
         AppController.getAll(findParams)
         .then(function (data)
         {
-            Success.json({
-                res,
-                message: getSuccessMessageForGetApps(req.query),
-                data: data.results,
-            });
+            // App was found
+            if (
+                data && data.results &&
+                Array.isArray(data.results) &&
+                data.results.length > 0
+            )
+            {
+                Success.json({
+                    res,
+                    message: getSuccessMessageForGetApps(req.query),
+                    data: data.results,
+                });
+            }
+
+            // App was not found
+            else
+            {
+                NotFound.json({
+                    res,
+                    message: getGetMessageForNoAppsFound(req.query),
+                });
+            }
         })
         .catch(function (err)
         {
-            let ResponseClass;
-            const response = { res };
-
-            // Mongo Error
-            if (err && err.status)
-            {
-                ResponseClass = getResponseByStatusCode(err.status) || InternalServerError;
-                
-                if (err.status === 500)
-                {
-                    err.message = getGetMessageForNoAppsFound(req.query);
-                }
-            }
-
-            // Other error
-            else
-            {
-                ResponseClass = BadRequest;
-                response.message = getFailedMessageForGetApps(req.query);
-                response.err = err;
-            }
-
-            ResponseClass.json(response);
+            InternalServerError.json({
+                res,
+                message: getFailedMessageForGetApps(req.query),
+                err,
+            });
         });
     })
     .catch(function (err)
@@ -231,7 +231,7 @@ app.post("/", function(req, res)
             // App already exists
             else
             {
-                BadRequest.json({
+                Conflict.json({
                     res,
                     message: `An app with a searchName of ${req.body.searchName} already exists`,
                 });
@@ -239,7 +239,7 @@ app.post("/", function(req, res)
         })
         .catch(function (err)
         {
-            BadRequest.json({
+            InternalServerError.json({
                 res,
                 message: `Failed to create an app named ${req.body.displayName}`,
                 err,
@@ -285,6 +285,7 @@ app.patch("/", function(req, res)
             // Mongo Error
             if (err && err.status && err.status === 500)
             {
+                // TODO: Not found should be a NotFound (404) error
                 InternalServerError.json({
                     res,
                     message: getUpdateMessageForNoAppsFound(findParams),
@@ -294,6 +295,7 @@ app.patch("/", function(req, res)
             // Other error
             else
             {
+                // TODO: This should be an InternalServerError
                 BadRequest.json({
                     res,
                     message: getFailedMessageForUpdateApps(findParams),
@@ -401,6 +403,7 @@ app.delete("/", function(req, res)
         })
         .catch(function (err)
         {
+            // TODO: Not found should be a NotFound (404) error
             // Mongo Error
             if (err && err.status && err.status === 500)
             {
@@ -413,6 +416,7 @@ app.delete("/", function(req, res)
             // Other error
             else
             {
+                // TODO: This should be an InternalServerError
                 BadRequest.json({
                     res,
                     message: getFailedMessageForDeleteApps(req.body),
