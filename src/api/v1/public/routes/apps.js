@@ -211,14 +211,31 @@ app.post("/", function(req, res)
     validateCreateAppPayload(req.body)
     .then(function (payload)
     {
-        AppController.insertOne(req.body)
+        AppController.insertOneIfNotExists({
+            searchName: req.body.searchName,
+        }, req.body)
         .then(function (data)
         {
-            Success.json({
-                res,
-                message: `Successfully created an app named ${req.body.displayName}`,
-                data: data,
-            });
+            const { model, result } = data.results;
+
+            // Inserted successfully
+            if (result.upsertedId)
+            {
+                Success.json({
+                    res,
+                    message: `Successfully created an app named ${req.body.displayName}`,
+                    data: model,
+                });
+            }
+
+            // App already exists
+            else
+            {
+                BadRequest.json({
+                    res,
+                    message: `An app with a searchName of ${req.body.searchName} already exists`,
+                });
+            }
         })
         .catch(function (err)
         {
