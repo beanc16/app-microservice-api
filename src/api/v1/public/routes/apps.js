@@ -29,8 +29,10 @@ const {
 // Response
 const {
     Success,
-    ValidationError,
     BadRequest,
+    NotFound,
+    Conflict,
+    ValidationError,
     InternalServerError,
 } = require("dotnet-responses");
 
@@ -52,32 +54,36 @@ app.get("/", function(req, res)
         AppController.getAll(findParams)
         .then(function (data)
         {
-            Success.json({
-                res,
-                message: getSuccessMessageForGetApps(req.query),
-                data: data.results,
-            });
-        })
-        .catch(function (err)
-        {
-            // Mongo Error
-            if (err && err.status && err.status === 500)
+            // App was found
+            if (
+                data && data.results &&
+                Array.isArray(data.results) &&
+                data.results.length > 0
+            )
             {
-                InternalServerError.json({
+                Success.json({
+                    res,
+                    message: getSuccessMessageForGetApps(req.query),
+                    data: data.results,
+                });
+            }
+
+            // App was not found
+            else
+            {
+                NotFound.json({
                     res,
                     message: getGetMessageForNoAppsFound(req.query),
                 });
             }
-
-            // Other error
-            else
-            {
-                BadRequest.json({
-                    res,
-                    message: getFailedMessageForGetApps(req.query),
-                    err,
-                });
-            }
+        })
+        .catch(function (err)
+        {
+            InternalServerError.json({
+                res,
+                message: getFailedMessageForGetApps(req.query),
+                err,
+            });
         });
     })
     .catch(function (err)
@@ -205,18 +211,35 @@ app.post("/", function(req, res)
     validateCreateAppPayload(req.body)
     .then(function (payload)
     {
-        AppController.insertOne(req.body)
+        AppController.insertOneIfNotExists({
+            searchName: req.body.searchName,
+        }, req.body)
         .then(function (data)
         {
-            Success.json({
-                res,
-                message: `Successfully created an app named ${req.body.displayName}`,
-                data: data,
-            });
+            const { model, result } = data.results;
+
+            // Inserted successfully
+            if (result.upsertedId)
+            {
+                Success.json({
+                    res,
+                    message: `Successfully created an app named ${req.body.displayName}`,
+                    data: model,
+                });
+            }
+
+            // App already exists
+            else
+            {
+                Conflict.json({
+                    res,
+                    message: `An app with a searchName of ${req.body.searchName} already exists`,
+                });
+            }
         })
         .catch(function (err)
         {
-            BadRequest.json({
+            InternalServerError.json({
                 res,
                 message: `Failed to create an app named ${req.body.displayName}`,
                 err,
@@ -262,6 +285,7 @@ app.patch("/", function(req, res)
             // Mongo Error
             if (err && err.status && err.status === 500)
             {
+                // TODO: Not found should be a NotFound (404) error
                 InternalServerError.json({
                     res,
                     message: getUpdateMessageForNoAppsFound(findParams),
@@ -271,6 +295,7 @@ app.patch("/", function(req, res)
             // Other error
             else
             {
+                // TODO: This should be an InternalServerError
                 BadRequest.json({
                     res,
                     message: getFailedMessageForUpdateApps(findParams),
@@ -378,6 +403,7 @@ app.delete("/", function(req, res)
         })
         .catch(function (err)
         {
+            // TODO: Not found should be a NotFound (404) error
             // Mongo Error
             if (err && err.status && err.status === 500)
             {
@@ -390,6 +416,7 @@ app.delete("/", function(req, res)
             // Other error
             else
             {
+                // TODO: This should be an InternalServerError
                 BadRequest.json({
                     res,
                     message: getFailedMessageForDeleteApps(req.body),
