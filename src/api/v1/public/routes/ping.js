@@ -22,7 +22,7 @@ app.get("/", function(req, res)
 {
     Success.json({
         res,
-        message: "Pong"
+        message: "Pong",
     });
 });
 
@@ -38,7 +38,7 @@ app.post("/", function(req, res)
 {
     Success.json({
         res,
-        message: "Pong"
+        message: "Pong",
     });
 });
 
@@ -54,7 +54,7 @@ app.put("/", function(req, res)
 {
     Success.json({
         res,
-        message: "Pong"
+        message: "Pong",
     });
 });
 
@@ -70,7 +70,7 @@ app.patch("/", function(req, res)
 {
     Success.json({
         res,
-        message: "Pong"
+        message: "Pong",
     });
 });
 
@@ -86,7 +86,7 @@ app.delete("/", function(req, res)
 {
     Success.json({
         res,
-        message: "Pong"
+        message: "Pong",
     });
 });
 
