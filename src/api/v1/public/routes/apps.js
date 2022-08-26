@@ -50,7 +50,7 @@ const {
 app.get("/", function(req, res)
 {
     validateGetAppsPayload(req.query)
-    .then(function (payload)
+    .then(function (/*payload*/)
     {
         const findParams = convertEnvForFindParams(req.query);
 
@@ -215,7 +215,7 @@ function convertEnvForFindParams(query)
 app.post("/", function(req, res)
 {
     validateCreateAppPayload(req.body)
-    .then(function (payload)
+    .then(function (/*payload*/)
     {
         AppController.insertOneIfNotExists({
             searchName: req.body.searchName,
@@ -275,7 +275,7 @@ app.post("/", function(req, res)
 app.patch("/", function(req, res)
 {
     validateUpdateAppPayload(req.body)
-    .then(function (payload)
+    .then(function (/*payload*/)
     {
         const findParams = req.body.old;
         const updateObj = req.body.new;
@@ -400,7 +400,7 @@ function getFailedMessageForUpdateApps(findParams)
 app.delete("/", function(req, res)
 {
     validateDeleteAppPayload(req.body)
-    .then(function (payload)
+    .then(function (/*payload*/)
     {
         AppController.findOneAndDelete(req.body)
         .then(function (data)
