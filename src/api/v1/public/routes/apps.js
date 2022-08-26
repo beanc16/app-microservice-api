@@ -29,7 +29,6 @@ const {
 // Response
 const {
     Success,
-    BadRequest,
     NotFound,
     Conflict,
     ValidationError,
@@ -79,9 +78,12 @@ app.get("/", function(req, res)
         })
         .catch(function (err)
         {
+            const errMsg = getFailedMessageForGetApps(req.query);
+            logger.error(errMsg, err);
+
             InternalServerError.json({
                 res,
-                message: getFailedMessageForGetApps(req.query),
+                message: errMsg,
                 err,
             });
         });
@@ -239,9 +241,12 @@ app.post("/", function(req, res)
         })
         .catch(function (err)
         {
+            const errMsg = `Failed to create an app named ${req.body.displayName}`;
+            logger.error(errMsg, err);
+
             InternalServerError.json({
                 res,
-                message: `Failed to create an app named ${req.body.displayName}`,
+                message: errMsg,
                 err,
             });
         });
@@ -283,10 +288,9 @@ app.patch("/", function(req, res)
         .catch(function (err)
         {
             // Mongo Error
-            if (err && err.status && err.status === 500)
+            if (err && err.status && err.status === 404)
             {
-                // TODO: Not found should be a NotFound (404) error
-                InternalServerError.json({
+                NotFound.json({
                     res,
                     message: getUpdateMessageForNoAppsFound(findParams),
                 });
@@ -295,10 +299,12 @@ app.patch("/", function(req, res)
             // Other error
             else
             {
-                // TODO: This should be an InternalServerError
-                BadRequest.json({
+                const errMsg = getFailedMessageForUpdateApps(findParams);
+                logger.error(errMsg, err);
+
+                InternalServerError.json({
                     res,
-                    message: getFailedMessageForUpdateApps(findParams),
+                    message: errMsg,
                     err,
                 });
             }
@@ -403,11 +409,10 @@ app.delete("/", function(req, res)
         })
         .catch(function (err)
         {
-            // TODO: Not found should be a NotFound (404) error
             // Mongo Error
-            if (err && err.status && err.status === 500)
+            if (err && err.status && err.status === 404)
             {
-                InternalServerError.json({
+                NotFound.json({
                     res,
                     message: getDeleteMessageForNoAppsFound(req.body),
                 });
@@ -416,10 +421,12 @@ app.delete("/", function(req, res)
             // Other error
             else
             {
-                // TODO: This should be an InternalServerError
-                BadRequest.json({
+                const errMsg = getFailedMessageForDeleteApps(findParams);
+                logger.error(errMsg, err);
+
+                InternalServerError.json({
                     res,
-                    message: getFailedMessageForDeleteApps(req.body),
+                    message: errMsg,
                     err,
                 });
             }
