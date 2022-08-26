@@ -13,6 +13,10 @@ app.use(bodyParser.json());                         // support json encoded bodi
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 
+// Telemetry
+const { logger } = require("@beanc16/logger");
+
+
 // Controllers
 const { AppController } = require("../../../../js/controllers");
 
