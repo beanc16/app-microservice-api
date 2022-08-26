@@ -425,7 +425,7 @@ app.delete("/", function(req, res)
             // Other error
             else
             {
-                const errMsg = getFailedMessageForDeleteApps(findParams);
+                const errMsg = getFailedMessageForDeleteApps(req.body);
                 logger.error(errMsg, err);
 
                 InternalServerError.json({
